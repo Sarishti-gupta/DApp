@@ -10,9 +10,12 @@ To run this program, you can use Remix, an online Solidity IDE. To get started, 
 
 Once you are on the Remix website, create a new file by clicking on the "+" icon in the left-hand sidebar. Save the file with a .sol extension (e.g., HelloWorld.sol). Copy and paste the following code into the file:
 
+
+
+
+
 async function initWallet(){
     try {
-      // check if any wallet provider is installed. i.e metamask xdcpay etc
       setWalletConnectLoader(true)
       if (typeof window.ethereum === 'undefined') {
         console.log("Please install wallet.")
@@ -21,7 +24,6 @@ async function initWallet(){
         return
       }
       else{
-          // raise a request for the provider to connect the account to our website
           const web3ModalVar = new Web3Modal({
             cacheProvider: true,
             providerOptions: {
@@ -38,7 +40,6 @@ async function initWallet(){
         const signerAddress = await signer.getAddress()
         console.log(signerAddress)
         setConnectedWalletAddress(signerAddress)
-        // readNumber(providerVar)
         setWalletConnected(true)
         setWalletConnectLoader(false)
         return
@@ -55,11 +56,9 @@ async function initWallet(){
       setRetrieveLoader(true)
       const signer = provider.getSigner();
   
-      // initialize smartcontract with the essentials details.
       const smartContract = new ethers.Contract(contractAddress, abi, provider);
       const contractWithSigner = smartContract.connect(signer);
   
-      // interact with the methods in smart contract
       const response = await contractWithSigner.readNum();
   
       console.log(parseInt(response))
@@ -79,7 +78,6 @@ async function initWallet(){
       const smartContract = new ethers.Contract(contractAddress, abi, provider);
       const contractWithSigner = smartContract.connect(signer);
 
-      // interact with the methods in smart contract as it's a write operation, we need to invoke the transaction using .wait()
       const writeNumTX = await contractWithSigner.writeNum(enteredNumber);
       const response = await writeNumTX.wait()
       console.log(await response)
